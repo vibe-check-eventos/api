@@ -25,7 +25,8 @@ class ParticipantFactory extends Factory
         return [
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
-            'password' => $this->faker->, // Example: 11 digits
+            'password' => $this->faker->password(),
+            'created_at' => $this->date('Y-m-d H:i:s')
         ];
     }
 }

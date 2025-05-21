@@ -24,9 +24,10 @@ class RegistrationFactory extends Factory
     public function definition()
     {
         return [
-            'event_id' => Event::factory(),
-            'participant_id' => Participant::factory(),
-            'registration_date' => $this->faker->dateTimeThisYear(),
+            'event_id' => Event::inRandomOrder()->first()->id,
+            'participant_id' => Participant::inRandomOrder()->first()->id,
+            'qr_code_base64' => $this->faker->md5(),
+            'created_at' => $this->faker->date('Y-m-d H:i:s'),
         ];
     }
 }

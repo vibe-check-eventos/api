@@ -23,9 +23,15 @@ class OrganizerFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name,
+            'organizer_type' => $this->faker->randomElement(["natural", "legal"]),
+            'legal_name' => $this->faker->company,
+            'cnpj' => $this->faker->numerify('###.###.###/####-##'),
+            'cpf' => $this->faker->numerify('###.###.###-##'),
+            'full_name' => $this->faker->word,
+            'password' => $this->faker->password,
             'email' => $this->faker->unique()->safeEmail,
             'phone' => $this->faker->phoneNumber,
+            'created_at'=> $this->faker->date('Y-m-d H:i:s')
         ];
     }
 }

@@ -25,10 +25,10 @@ class EventAddressFactory extends Factory
             'street' => $this->faker->streetName,
             'number' => $this->faker->buildingNumber,
             'complement' => $this->faker->secondaryAddress,
-            'district' => $this->faker->citySuffix,
+            'neighborhood' => $this->faker->citySuffix,
             'city' => $this->faker->city,
             'state' => $this->faker->stateAbbr,
-            'cep' => $this->faker->postcode,
+            'zip_code' => $this->faker->postcode,
         ];
     }
 }

@@ -24,13 +24,13 @@ class EventFactory extends Factory
     public function definition()
     {
         return [
-            'organizer_id' => Organizer::factory(),
-            'event_address_id' => EventAddress::factory(),
+            'organizer_id' => Organizer::inRandomOrder()->first()->id,
+            'event_address_id' => EventAddress::inRandomOrder()->first()->id,
             'name' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
             'date' => $this->faker->dateTimeBetween('+1 week', '+1 year')->format('Y-m-d H:i:s'),
             'price' => $this->faker->randomFloat(2, 0, 1000),
-            'status' => $this->faker->randomElement(['scheduled', 'cancelled', 'completed']),
+            'status' => $this->faker->randomElement([true, false]),
         ];
     }
 }

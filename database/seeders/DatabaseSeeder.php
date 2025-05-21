@@ -2,7 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Models\Event;
+use App\Models\EventAddress;
+use App\Models\Organizer;
+use App\Models\Participant;
+use App\Models\Registration;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,6 +17,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(10)->create();
+        EventAddress::factory(10)->create();
+        Participant::factory(10)->create();
+        Organizer::factory(10)->create();
+        Event::factory(10)->create();
+        Registration::factory(10)->create();
     }
 }
