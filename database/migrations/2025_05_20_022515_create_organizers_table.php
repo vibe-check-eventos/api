@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('legal_name')->nullable();
             $table->string('cnpj')->nullable();
             $table->string('full_name')->nullable();
+            $table->string('phone')->nullable();
             $table->string('cpf')->nullable();
             $table->string('email')->unique()->nullable();
             $table->string('password')->nullable();

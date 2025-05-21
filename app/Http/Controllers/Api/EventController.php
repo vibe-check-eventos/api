@@ -14,6 +14,8 @@ class EventController extends Controller
     public function index()
     {
         $events = Event::with(['organizer', 'event_address'])->get();
+
+        return response()->json($events);
     }
 
     /**
@@ -21,6 +23,16 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
+
+        $request->validate([
+            'organizer_id' => 'required|integer',
+            'name' => 'required|string',
+            'description' => 'required|string',
+            'capacity' => 'required|integer',
+            'is_active' => 'required|boolean',
+            'address_event_id' => 'required|integer'
+        ]);
+
         $event = Event::create([
             'organizer_id' => $request->organizer_id,
             'name' => $request->name,
@@ -48,6 +60,8 @@ class EventController extends Controller
         if (!$event) {
             return response()->json(['message' => 'Event not found!'], 404);
         }
+
+        return response()->json($event);
     }
 
     /**

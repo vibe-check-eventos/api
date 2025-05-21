@@ -29,6 +29,7 @@ class EventAddressFactory extends Factory
             'city' => $this->faker->city,
             'state' => $this->faker->stateAbbr,
             'zip_code' => $this->faker->postcode,
+            'created_at'=> $this->faker->date('Y-m-d H:i:s')
         ];
     }
 }

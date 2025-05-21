@@ -28,9 +28,9 @@ class EventFactory extends Factory
             'event_address_id' => EventAddress::inRandomOrder()->first()->id,
             'name' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
-            'date' => $this->faker->dateTimeBetween('+1 week', '+1 year')->format('Y-m-d H:i:s'),
-            'price' => $this->faker->randomFloat(2, 0, 1000),
-            'status' => $this->faker->randomElement([true, false]),
+            'is_active' => $this->faker->randomElement([true, false]),
+            'capacity' => $this->faker->numberBetween(1, 100),
+            'created_at'=> $this->faker->date('Y-m-d H:i:s')
         ];
     }
 }

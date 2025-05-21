@@ -8,10 +8,6 @@ use App\Http\Controllers\Api\EventAddressController;
 use App\Http\Controllers\Api\RegistrationController;
 use App\Http\Controllers\Api\ParticipantController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:api');
-
 Route::apiResource('organizers', OrganizerController::class);
 Route::apiResource('events', EventController::class);
 Route::apiResource('event-addresses', EventAddressController::class);
