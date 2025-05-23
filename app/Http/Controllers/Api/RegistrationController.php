@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Event;
+use App\Models\Participant;
 use App\Models\Registration;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class RegistrationController extends Controller
 {
@@ -13,7 +16,23 @@ class RegistrationController extends Controller
      */
     public function index()
     {
-        $registrations = Registration::all();
+        $registrations = Registration::with(['participant', 'event'])->get();
+        return response()->json($registrations);
+    }
+
+    /**
+     * Display a listing of registrations for a specific participant with relationships.
+     */
+    public function registrationsByParticipant($participant_id)
+    {
+        $registrations = Registration::with(['participant', 'event'])
+            ->where('participant_id', $participant_id)
+            ->get();
+
+        if ($registrations->isEmpty()) {
+            return response()->json(['message' => 'Nenhuma inscrição encontrada para este participante.'], 404);
+        }
+
         return response()->json($registrations);
     }
 
@@ -21,12 +40,31 @@ class RegistrationController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
+    {
+
+            try {
         $request->validate([
             'participant_id' => 'required|integer',
             'event_id' => 'required|integer',
             'qr_code_base64' => 'required|string'
         ]);
+    } catch (ValidationException $e) {
+        return response()->json([
+            'message' => 'Dados inválidos.',
+            'missing' => $e->errors()
+        ], 422);
+    }
+                $participant = Participant::find($request->participant_id);
+
+        if($participant == null){
+            return response()->json(['message'=> 'Participante não existe.'],400);
+        }
+
+                $event = Event::find($request->event_id);
+
+        if($event == null){
+            return response()->json(['message'=> 'Evento não existe.'],400);
+        }
 
         $registration = new Registration;
         $registration->participant_id = $request->participant_id;
@@ -46,7 +84,7 @@ class RegistrationController extends Controller
         $registration = Registration::find($id);
 
         if (!$registration) {
-            return response()->json(['message' => 'Registration not found'], 404);
+            return response()->json(['message' => 'Ingresso não encontrado.'], 404);
         }
 
         return response()->json($registration);
@@ -57,17 +95,34 @@ class RegistrationController extends Controller
      */
     public function update(Request $request, string $id)
     {   
-
+            try {
         $request->validate([
             'participant_id' => 'required|integer',
             'event_id' => 'required|integer',
             'qr_code_base64' => 'required|string'
         ]);
+    } catch (ValidationException $e) {
+        return response()->json([
+            'message' => 'Dados inválidos.',
+            'missing' => $e->errors()
+        ], 422);
+    }
+        $participant = Participant::find($request->participant_id);
+
+        if($participant == null){
+            return response()->json(['message'=> 'Participante não existe.'],400);
+        }
+
+        $event = Event::find($request->event_id);
+        
+        if($event == null){
+            return response()->json(['message'=> 'Evento não existe.'],400);
+        }
 
         $registration = Registration::find($id);
 
         if (!$registration) {
-            return response()->json(['message' => 'Registration not found'], 404);
+            return response()->json(['message' => 'Ingresso não encontrado.'], 404);
         }
 
         $registration->participant_id = $request->participant_id;
@@ -87,11 +142,11 @@ class RegistrationController extends Controller
         $registration = Registration::find($id);
 
         if (!$registration) {
-            return response()->json(['message' => 'Registration not found'], 404);
+            return response()->json(['message' => 'Ingresso não encontrado.'], 404);
         }
 
         $registration->delete();
 
-        return response()->json(['message' => 'Registration deleted successfully']);
+        return response()->json(['message' => 'Ingresso deletado com sucesso.']);
     }
 }

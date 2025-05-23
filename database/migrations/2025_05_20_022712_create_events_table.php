@@ -15,13 +15,13 @@ return new class extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->foreignId('organizer_id');
-            $table->foreign("organizer_id")->references("id")->on("organizers");
-            $table->string('name');
-            $table->text('description');
-            $table->boolean('is_active')->default(true);
-            $table->integer('capacity');
+            $table->foreign("organizer_id")->references("id")->on("organizers")->nullable();
+            $table->string('name')->nullable();
+            $table->text('description')->nullable();
+            $table->boolean('is_active')->default(true)->nullable();
+            $table->integer('capacity')->nullable();
             $table->foreignId('event_address_id');
-            $table->foreign("event_address_id")->references("id")->on("event_addresses");
+            $table->foreign("event_address_id")->references("id")->on("event_addresses")->nullable();
             $table->timestamps();
         });
     }

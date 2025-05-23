@@ -9,4 +9,20 @@ class Organizer extends Model
 {
     use HasFactory;
 
+        /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'organizer_type',
+        'company_name',
+        'legal_name',
+        'cnpj',
+        'full_name',
+        'cpf',
+        'email',
+        'password'
+    ];
+
 }

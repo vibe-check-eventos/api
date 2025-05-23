@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Organizer;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class OrganizerController extends Controller
 {
@@ -18,11 +19,42 @@ class OrganizerController extends Controller
     }
 
     /**
+     * Login an organizer.
+     */
+    public function login(Request $request)
+    {
+
+            try {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string'
+        ]);
+    } catch (ValidationException $e) {
+        return response()->json([
+            'message' => 'Dados inválidos.',
+            'missing' => $e->errors()
+        ], 422);
+    }
+
+
+
+        $organizer = Organizer::where('email', $request->email)->first();
+
+        if (!$organizer || $organizer->password !== $request->password) {
+            return response()->json(['message' => 'Credenciais inválidas.'], 401);
+        }
+
+        // In a real app, return a token here
+        return response()->json(['message' => 'Login realizado com sucesso.', 'organizer' => $organizer]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
         
+            try {
         $request->validate([
             'organizer_type' => 'required|boolean',
             'company_name' => 'required|string',
@@ -33,6 +65,12 @@ class OrganizerController extends Controller
             'email' => 'required|email|unique:organizers',
             'password' => 'required|string'
         ]);
+    } catch (ValidationException $e) {
+        return response()->json([
+            'message' => 'Dados inválidos.',
+            'missing' => $e->errors()
+        ], 422);
+    }
 
         $organizer = Organizer::create([
             'organizer_type' => $request->organizer_type,
@@ -56,7 +94,7 @@ class OrganizerController extends Controller
         //
         $organizer = Organizer::find($id);
         if (!$organizer) {
-            return response()->json(['message' => 'Organizer not found'], 404);
+            return response()->json(['message' => 'Organizador não encontrado.'], 404);
         }
         return $organizer;
     }
@@ -67,6 +105,7 @@ class OrganizerController extends Controller
     public function update(Request $request, string $id)
     {
         
+            try {
         $request->validate([
             'organizer_type' => 'required|boolean',
             'company_name' => 'required|string',
@@ -74,13 +113,19 @@ class OrganizerController extends Controller
             'cnpj' => 'required|string',
             'full_name' => 'required|string',
             'cpf' => 'required|string',
-            'email' => 'required|email|unique:organizers',
+            'email' => 'required|email',
             'password' => 'required|string'
         ]);
+    } catch (ValidationException $e) {
+        return response()->json([
+            'message' => 'Dados inválidos.',
+            'missing' => $e->errors()
+        ], 422);
+    }
 
         $organizer = Organizer::find($id);
         if (!$organizer) {
-            return response()->json(['message' => 'Organizer not found'], 404);
+            return response()->json(['message' => 'Organizador não encontrado.'], 404);
         }
         $organizer->update([
             'organizer_type' => $request->organizer_type,
@@ -105,10 +150,10 @@ class OrganizerController extends Controller
         $organizer = Organizer::find($id);
 
         if (!$organizer) {
-            return response()->json(['message' => 'Organizer not found'], 404);
+            return response()->json(['message' => 'Organizador não encontrado.'], 404);
         }
         
         $organizer->delete();
-        return response()->json(['message' => 'Organizer deleted']);
+        return response()->json(['message' => 'Organizador deletado com sucesso.']);
     }
 }

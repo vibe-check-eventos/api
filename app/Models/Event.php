@@ -28,4 +28,18 @@ class Event extends Model
         return $this->belongsTo(Organizer::class);
     }
 
+        /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'organizer_id',
+        'name',
+        'description',
+        'capacity',
+        'is_active',
+        'event_address_id',
+    ];
+
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\EventAddress;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class EventAddressController extends Controller
 {
@@ -18,12 +19,14 @@ class EventAddressController extends Controller
         return response()->json($eventAddresses);
     }
 
+    
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        
+            try {
         // Validate the incoming request data
         $validatedData = $request->validate([
             'street' => 'required|string',
@@ -34,8 +37,15 @@ class EventAddressController extends Controller
             'state' => 'required|string',
             'zip_code' => 'required|string',
         ]);
+    } catch (ValidationException $e) {
+        return response()->json([
+            'message' => 'Dados inválidos.',
+            'missing' => $e->errors()
+        ], 422);
+    }
 
-        $eventAddress = EventAddress::create($request->all()); // Replace with $validatedData if using validation
+
+        $eventAddress = EventAddress::create($validatedData); // Replace with $validatedData if using validation
         return response()->json($eventAddress, 201);
     }
 
@@ -46,7 +56,7 @@ class EventAddressController extends Controller
     {
         $eventAddress = EventAddress::find($id);
         if (!$eventAddress) {
-            return response()->json(['message' => 'Event Address not found'], 404);
+            return response()->json(['message' => 'Endereço de evento não encontrado.'], 404);
         }
         return response()->json($eventAddress);
     }
@@ -58,10 +68,11 @@ class EventAddressController extends Controller
     {
         $eventAddress = EventAddress::find($id);
         if (!$eventAddress) {
-            return response()->json(['message' => 'Event Address not found'], 404);
+            return response()->json(['message' => 'Endereço de evento não encontrado.'], 404);
         }
 
-        // Validate the incoming request data
+            try {
+      // Validate the incoming request data
         $validatedData = $request->validate([
             'street' => 'sometimes|string',
             'number' => 'required|string',
@@ -71,7 +82,13 @@ class EventAddressController extends Controller
             'state' => 'required|string',
             'zip_code' => 'required|string',
         ]);
-
+    } catch (ValidationException $e) {
+        return response()->json([
+            'message' => 'Dados inválidos.',
+            'missing' => $e->errors()
+        ], 422);
+    }
+  
         $eventAddress->update($request->all()); // Replace with $validatedData if using validation
         return response()->json($eventAddress);
     }
@@ -83,9 +100,9 @@ class EventAddressController extends Controller
     {
         $eventAddress = EventAddress::find($id);
         if (!$eventAddress) {
-            return response()->json(['message' => 'Event Address not found'], 404);
+            return response()->json(['message' => 'Endereço de evento não encontrado.'], 404);
         }
         $eventAddress->delete();
-        return response()->json(['message' => 'Event Address deleted successfully']);
+        return response()->json(['message' => 'Endereço de evento deletado com sucesso.']);
     }
 }

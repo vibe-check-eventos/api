@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Event;
+use App\Models\EventAddress;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class EventController extends Controller
 {
@@ -17,6 +19,22 @@ class EventController extends Controller
 
         return response()->json($events);
     }
+  
+    /**
+     * Display a listing of events for a specific organizer.
+     */
+    public function eventsByOrganizer($organizer_id)
+    {
+        $events = Event::with(['organizer', 'event_address'])
+            ->where('organizer_id', $organizer_id)
+            ->get();
+
+        if ($events->isEmpty()) {
+            return response()->json(['message' => 'Nenhum evento encontrado para este organizador.'], 404);
+        }
+
+        return response()->json($events);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -24,29 +42,31 @@ class EventController extends Controller
     public function store(Request $request)
     {
 
+        //dd($request->all());
+            try {
         $request->validate([
             'organizer_id' => 'required|integer',
             'name' => 'required|string',
             'description' => 'required|string',
             'capacity' => 'required|integer',
             'is_active' => 'required|boolean',
-            'address_event_id' => 'required|integer'
+            'event_address_id' => 'required|integer'
         ]);
-
-        $event = Event::create([
-            'organizer_id' => $request->organizer_id,
-            'name' => $request->name,
-            'description' => $request->description,
-            'is_active' => $request->is_active,
-            'capacity' => $request->capacity,
-            'address_event_id' => $request->address_event_id,
-        ]);
-
+    } catch (ValidationException $e) {
         return response()->json([
-            'message' => 'Event created successfully!',
-            'event' => $event,
-        ], 201);
+            'message' => 'Dados inválidos.',
+            'missing' => $e->errors()
+        ], 422);
+    }
+        $address = EventAddress::find($request->address_id);
 
+        if($address == null){
+            return response()->json(['message'=> 'Endereço de evento não existe.'],400);
+        }
+
+        $event = Event::create($request->all());
+
+        return response()->json($event, 201);
 
     }
 
@@ -58,7 +78,7 @@ class EventController extends Controller
         $event = Event::with(['organizer', 'event_address'])->find($id);
 
         if (!$event) {
-            return response()->json(['message' => 'Event not found!'], 404);
+            return response()->json(['message' => 'Evento não encontrado.'], 404);
         }
 
         return response()->json($event);
@@ -69,10 +89,33 @@ class EventController extends Controller
      */
     public function update(Request $request, string $id)
     {
+
+            try {
+        $request->validate([
+            'organizer_id' => 'required|integer',
+            'name' => 'required|string',
+            'description' => 'required|string',
+            'capacity' => 'required|integer',
+            'is_active' => 'required|boolean',
+            'event_address_id' => 'required|integer'
+        ]);
+    } catch (ValidationException $e) {
+        return response()->json([
+            'message' => 'Dados inválidos.',
+            'missing' => $e->errors()
+        ], 422);
+    }
+
         $event = Event::find($id);
 
         if (!$event) {
-            return response()->json(['message' => 'Event not found!'], 404);
+            return response()->json(['message' => 'Evento não encontrado.'], 404);
+        }
+        
+        $address = EventAddress::find($request->address_id);
+
+        if($address == null){
+            return response()->json(['message'=> 'Endereço de evento não existe.'],400);
         }
 
         $event->update([
@@ -81,10 +124,10 @@ class EventController extends Controller
             'description' => $request->description,
             'is_active' => $request->is_active,
             'capacity' => $request->capacity,
-            'address_event_id' => $request->address_event_id,
+            'event_address_id' => $request->event_address_id,
         ]);
 
-        return response()->json(['message' => 'Event updated successfully!'], 200);
+        return response()->json($event, 200);
     }
 
     /**
@@ -95,12 +138,12 @@ class EventController extends Controller
         $event = Event::find($id);
 
         if (!$event) {
-            return response()->json(['message' => 'Event not found!'], 404);
+            return response()->json(['message' => 'Evento não encontrado.'], 404);
         }
 
         $event->delete();
 
-        return response()->json(['message' => 'Event deleted successfully!'], 200);
+        return response()->json(['message' => 'Evento deletado com sucesso.'], 200);
 
     }
 }
