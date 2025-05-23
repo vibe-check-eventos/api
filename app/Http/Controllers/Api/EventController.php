@@ -15,7 +15,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = Event::with(['organizer', 'event_address'])->get();
+        $events = Event::with(['organizer', 'event_address'])->inRandomOrder()->get();
 
         return response()->json($events);
     }
