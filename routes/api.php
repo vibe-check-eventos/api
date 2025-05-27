@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\EventAddressController;
 use App\Http\Controllers\Api\RegistrationController;
 use App\Http\Controllers\Api\ParticipantController;
+use App\Models\Checkin;
 
 Route::apiResource('organizers', OrganizerController::class);
 Route::post('organizers/login', [OrganizerController::class, 'login']);
@@ -21,3 +22,5 @@ Route::get('participants/{participant_id}/registrations', [RegistrationControlle
 
 Route::apiResource('participants', ParticipantController::class);
 Route::post('participants/login', [ParticipantController::class, 'login']);
+
+Route::apiResource('checkins', Checkin::class);

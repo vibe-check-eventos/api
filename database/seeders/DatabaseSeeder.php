@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Checkin;
 use App\Models\Event;
 use App\Models\EventAddress;
 use App\Models\Organizer;
@@ -22,5 +23,6 @@ class DatabaseSeeder extends Seeder
         Organizer::factory(10)->create();
         Event::factory(10)->create();
         Registration::factory(10)->create();
+        Checkin::factory(10)->create();
     }
 }
