@@ -45,7 +45,7 @@ class OrganizerController extends Controller
         }
 
         // In a real app, return a token here
-        return response()->json(['message' => 'Login realizado com sucesso.', 'organizer' => $organizer]);
+        return response()->json($organizer);
     }
 
     /**
@@ -54,12 +54,12 @@ class OrganizerController extends Controller
     public function store(Request $request)
     {
         
-            try {
+    try {
         $request->validate([
             'organizer_type' => 'required|boolean',
-            'company_name' => 'required|string',
-            'legal_name' => 'required|string',
-            'cnpj' => 'required|string',
+            'company_name' => 'string',
+            'legal_name' => 'string',
+            'cnpj' => 'string',
             'full_name' => 'required|string',
             'cpf' => 'required|string',
             'email' => 'required|email|unique:organizers',
@@ -73,14 +73,14 @@ class OrganizerController extends Controller
     }
 
         $organizer = Organizer::create([
-            'organizer_type' => $request->organizer_type,
-            'company_name' => $request->company_name,
-            'legal_name' => $request->legal_name,
-            'cnpj' => $request->cnpj,
-            'full_name' => $request->full_name,
-            'cpf' => $request->cpf,
-            'email' => $request->email,
-            'password' => $request->password
+            'organizer_type' => $request->organizer_type ?? null,
+            'company_name' => $request->company_name ?? null,
+            'legal_name' => $request->legal_name ?? null,
+            'cnpj' => $request->cnpj ?? null,
+            'full_name' => $request->full_name ?? null,
+            'cpf' => $request->cpf ?? null,
+            'email' => $request->email ?? null,
+            'password' => $request->password ?? null
         ]);
 
         return response()->json($organizer, 201);
