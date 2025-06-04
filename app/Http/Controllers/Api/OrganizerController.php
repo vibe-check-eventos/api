@@ -14,7 +14,6 @@ class OrganizerController extends Controller
      */
     public function index()
     {
-        //
         return Organizer::all();
     }
 
@@ -57,11 +56,11 @@ class OrganizerController extends Controller
     try {
         $request->validate([
             'organizer_type' => 'required|boolean',
-            'company_name' => 'string',
-            'legal_name' => 'string',
-            'cnpj' => 'string',
+            'company_name' => 'nullable|string',
+            'legal_name' => 'nullable|string',
+            'cnpj' => 'nullable|string',
             'full_name' => 'required|string',
-            'cpf' => 'required|string',
+            'cpf' => 'nullable|string',
             'email' => 'required|email|unique:organizers',
             'password' => 'required|string'
         ]);
@@ -94,7 +93,7 @@ class OrganizerController extends Controller
         //
         $organizer = Organizer::find($id);
         if (!$organizer) {
-            return response()->json(['message' => 'Organizador não encontrado.'], 404);
+            return response()->json(['message' => 'Organizador não encontrado.'], 200);
         }
         return $organizer;
     }

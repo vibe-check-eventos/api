@@ -16,8 +16,7 @@ class Registration extends Model
      */
     protected $fillable = [
         'participant_id',
-        'event_id',
-        'qr_code_base64',
+        'event_id'
     ];
 
     /**

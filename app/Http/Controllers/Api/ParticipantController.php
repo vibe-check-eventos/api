@@ -43,7 +43,7 @@ class ParticipantController extends Controller
         }
 
         // In a real app, return a token here
-        return response()->json(['message' => 'Login realizado com sucesso.', 'participant' => $participant]);
+        return response()->json($participant);
     }
 
     

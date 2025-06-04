@@ -30,12 +30,12 @@ class EventAddressController extends Controller
         // Validate the incoming request data
         $validatedData = $request->validate([
             'street' => 'required|string',
-            'number' => 'required|string',
+            'number' => 'nullable|string',
             'complement' => 'nullable|string',
-            'neighborhood' => 'required|string',
-            'city' => 'required|string',
-            'state' => 'required|string',
-            'zip_code' => 'required|string',
+            'neighborhood' => 'nullable|string',
+            'city' => 'nullable|string',
+            'state' => 'nullable|string',
+            'zip_code' => 'nullable|string',
         ]);
     } catch (ValidationException $e) {
         return response()->json([

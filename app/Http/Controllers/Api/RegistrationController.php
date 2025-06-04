@@ -21,6 +21,22 @@ class RegistrationController extends Controller
     }
 
     /**
+     * Display a listing of registrations for a specific event with relationships.
+     */
+    public function registrationsByEvent($event_id)
+    {
+        $registrations = Registration::with(['participant', 'event'])
+            ->where('event_id', $event_id)
+            ->get();
+
+        if ($registrations->isEmpty()) {
+            return response()->json(['message' => 'Nenhuma inscrição encontrada para este evento.'], 200);
+        }
+
+        return response()->json($registrations);
+    }
+
+    /**
      * Display a listing of registrations for a specific participant with relationships.
      */
     public function registrationsByParticipant($participant_id)
@@ -45,8 +61,7 @@ class RegistrationController extends Controller
             try {
         $request->validate([
             'participant_id' => 'required|integer',
-            'event_id' => 'required|integer',
-            'qr_code_base64' => 'required|string'
+            'event_id' => 'required|integer'
         ]);
     } catch (ValidationException $e) {
         return response()->json([
@@ -69,8 +84,6 @@ class RegistrationController extends Controller
         $registration = new Registration;
         $registration->participant_id = $request->participant_id;
         $registration->event_id = $request->event_id;
-        $registration->qr_code_base64 = $request->qr_code_base64;
-
         $registration->save();
 
         return response()->json($registration, 201);
@@ -98,8 +111,7 @@ class RegistrationController extends Controller
             try {
         $request->validate([
             'participant_id' => 'required|integer',
-            'event_id' => 'required|integer',
-            'qr_code_base64' => 'required|string'
+            'event_id' => 'required|integer'
         ]);
     } catch (ValidationException $e) {
         return response()->json([

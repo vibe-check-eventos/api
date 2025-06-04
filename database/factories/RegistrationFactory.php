@@ -26,7 +26,6 @@ class RegistrationFactory extends Factory
         return [
             'event_id' => Event::inRandomOrder()->first()->id,
             'participant_id' => Participant::inRandomOrder()->first()->id,
-            'qr_code_base64' => $this->faker->md5(),
             'created_at' => $this->faker->date('Y-m-d H:i:s'),
         ];
     }

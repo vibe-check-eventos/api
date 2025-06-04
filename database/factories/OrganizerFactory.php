@@ -23,7 +23,7 @@ class OrganizerFactory extends Factory
     public function definition()
     {
         return [
-            'organizer_type' => $this->faker->randomElement(["natural", "legal"]),
+            'organizer_type' => $this->faker->randomElement([0, 1]),
             'legal_name' => $this->faker->company,
             'cnpj' => $this->faker->numerify('###.###.###/####-##'),
             'cpf' => $this->faker->numerify('###.###.###-##'),

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\Checkin;
 use Illuminate\Http\Request;
 
@@ -10,6 +11,15 @@ class CheckinController extends Controller
     public function index()
     {
         return Checkin::all();
+    }
+
+    public function getByRegistration($registrationId)
+    {
+        $checkins = Checkin::with(['registration.participant', 'registration.event'])
+            ->where('registration_id', $registrationId)
+            ->get();
+
+        return $checkins;
     }
 
     public function store(Request $request)
@@ -30,6 +40,7 @@ class CheckinController extends Controller
     {
         $validated = $request->validate([
             'registration_id' => 'sometimes|exists:registrations,id',
+
         ]);
 
         $checkin->update($validated);

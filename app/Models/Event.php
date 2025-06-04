@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 
 class Event extends Model
 {
@@ -40,6 +41,9 @@ class Event extends Model
         'capacity',
         'is_active',
         'event_address_id',
+        'date'
     ];
+
+    public $timestamps = false;
 
 }

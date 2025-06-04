@@ -7,6 +7,7 @@ use App\Models\Event;
 use App\Models\EventAddress;
 use App\Models\Organizer;
 use App\Models\Participant;
+use App\Models\QrCode;
 use App\Models\Registration;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -24,5 +25,6 @@ class DatabaseSeeder extends Seeder
         Event::factory(10)->create();
         Registration::factory(10)->create();
         Checkin::factory(10)->create();
+        QrCode::factory(10)->create();
     }
 }

@@ -30,7 +30,7 @@ class EventFactory extends Factory
             'description' => $this->faker->paragraph,
             'is_active' => $this->faker->randomElement([true, false]),
             'capacity' => $this->faker->numberBetween(1, 100),
-            'created_at'=> $this->faker->date('Y-m-d H:i:s')
+            'date' => $this->faker->date('Y-m-d H:i:s')
         ];
     }
 }

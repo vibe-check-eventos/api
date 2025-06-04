@@ -22,7 +22,7 @@ return new class extends Migration
             $table->integer('capacity')->nullable();
             $table->foreignId('event_address_id');
             $table->foreign("event_address_id")->references("id")->on("event_addresses")->nullable();
-            $table->timestamps();
+            $table->dateTime('date')->nullable();
         });
     }
 

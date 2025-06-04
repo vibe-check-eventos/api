@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreignId('event_id');
             $table->foreign("participant_id")->references("id")->on("participants");            
             $table->foreign("event_id")->references("id")->on("events"); 
-            $table->text('qr_code_base64')->nullable();
             $table->timestamps();
         });
     }
